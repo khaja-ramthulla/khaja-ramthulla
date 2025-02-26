@@ -23,9 +23,23 @@ body {
 .home-section h1 {
     font-size: 4em;
     font-weight: bold; 
-    background: white;
+    background: linear-gradient(135deg, #cce7ff, #ffffff);
+    background-size: 200% 100%; /* Double width for animation */
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    animation: glitter 5s linear infinite;
 }
 
+/* Keyframes for Glitter Animation */
+@keyframes glitter {
+    0% {
+        background-position: 0% 60%; /* Start position */
+    }
+    100% {
+        background-position: 100% 50%; /* End position */
+    }
+}
 
 .home-section p {
     font-size: 1.2em;
@@ -43,8 +57,8 @@ body {
 }
 
 .section-button {
-    background: linear-gradient(135deg, #cce7ff, #ffffff);
-    color: #003366;
+    background: linear-gradient(135deg, red, blue);
+    color: green;
     padding: 15px 30px;
     border: none;
     border-radius: 50px;
@@ -90,7 +104,7 @@ h2 {
 
 .nav-button:hover {
     background-color: #cce7ff;
-    color: #003366;
+    color:yellow;
 }
 
 /* Questionnaire */

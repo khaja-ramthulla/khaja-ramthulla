@@ -23,23 +23,9 @@ body {
 .home-section h1 {
     font-size: 4em;
     font-weight: bold; 
-    background: linear-gradient(to right, red, #42A5F5,green);
-    background-size: 200% 100%; /* Double width for animation */
-    -webkit-background-clip: text;
-    background-clip: text;
-    -webkit-text-fill-color: transparent;
-    animation: glitter 5s linear infinite;
+    background: white;
 }
 
-/* Keyframes for Glitter Animation */
-@keyframes glitter {
-    0% {
-        background-position: 0% 60%; /* Start position */
-    }
-    100% {
-        background-position: 100% 50%; /* End position */
-    }
-}
 
 .home-section p {
     font-size: 1.2em;

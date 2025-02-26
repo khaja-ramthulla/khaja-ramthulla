@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Visualization</title>
+    <link rel="stylesheet" href="styles.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+    <!-- Back Button -->
+    <a href="index.html" class="nav-button">Back to Home</a>
+
+    <!-- Visualization Section -->
+    <section class="content-section">
+        <h2>Welcome to Survey Data Visualization</h2>
+        <p>Select a visualization type below:</p>
+
+        <!-- Buttons for Visualizations -->
+        <div class="button-container">
+            <button class="section-button" onclick="showChart('pie')">Pie Chart</button>
+            <button class="section-button" onclick="showChart('bar')">Bar Graph</button>
+            <button class="section-button" onclick="showChart('line')">Line Chart</button>
+            <button class="section-button" onclick="showChart('doughnut')">Doughnut Chart</button>
+        </div>
+
+        <!-- Chart Container -->
+        <div class="chart-container">
+            <canvas id="visualizationChart"></canvas>
+        </div>
+    </section>
+
+    <!-- JavaScript for Chart Interactivity -->
+    <script>
+        // Sample data for visualization
+        const tuitionData = {
+            labels: ['Yes', 'No'],
+            datasets: [{
+                label: 'Tuition Preference',
+                data: [30, 20],
+                backgroundColor: ['#FF5722', '#03A9F4'], // Orange and Blue
+                borderColor: ['#FF5722', '#03A9F4'],
+                borderWidth: 1
+            }]
+        };
+
+        const reasonData = {
+            labels: ['Weak in Subjects', 'Parental Pressure', 'Competitive Exams', 'Self-Study'],
+            datasets: [{
+                label: 'Reasons for Tuition',
+                data: [15, 10, 8, 7],
+                backgroundColor: ['#E91E63', '#9C27B0', '#4CAF50', '#FFC107'], // Pink, Purple, Green, Yellow
+                borderColor: ['#E91E63', '#9C27B0', '#4CAF50', '#FFC107'],
+                borderWidth: 1
+            }]
+        };
+
+        // Function to show selected chart
+        let currentChart = null;
+
+        function showChart(chartType) {
+            const ctx = document.getElementById('visualizationChart').getContext('2d');
+
+            // Destroy existing chart if it exists
+            if (currentChart) {
+                currentChart.destroy();
+            }
+
+            // Render the selected chart
+            switch (chartType) {
+                case 'pie':
+                    currentChart = new Chart(ctx, {
+                        type: 'pie',
+                        data: tuitionData,
+                        options: {
+                            responsive: true,
+                            plugins: {
+                                legend: {
+                                    position: 'top',
+                                },
+                                title: {
+                                    display: true,
+                                    text: 'Tuition Preference'
+                                }
+                            }
+                        }
+                    });
+                    break;
+
+                case 'bar':
+                    currentChart = new Chart(ctx, {
+                        type: 'bar',
+                        data: reasonData,
+                        options: {
+                            responsive: true,
+                            plugins: {
+                                legend: {
+                                    position: 'top',
+                                },
+                                title: {
+                                    display: true,
+                                    text: 'Reasons for Tuition'
+                                }
+                            },
+                            scales: {
+                                y: {
+                                    beginAtZero: true,
+                                    ticks: {
+                                        stepSize: 5
+                                    }
+                                }
+                            }
+                        }
+                    });
+                    break;
+
+                case 'line':
+                    currentChart = new Chart(ctx, {
+                        type: 'line',
+                        data: {
+                            labels: ['Week 1', 'Week 2', 'Week 3', 'Week 4'],
+                            datasets: [{
+                                label: 'Student Enrollment Over Time',
+                                data: [10, 20, 15, 25],
+                                borderColor: '#03A9F4',
+                                backgroundColor: 'rgba(3, 169, 244, 0.2)',
+                                borderWidth: 2,
+                                fill: true
+                            }]
+                        },
+                        options: {
+                            responsive: true,
+                            plugins: {
+                                legend: {
+                                    position: 'top',
+                                },
+                                title: {
+                                    display: true,
+                                    text: 'Student Enrollment Over Time'
+                                }
+                            },
+                            scales: {
+                                y: {
+                                    beginAtZero: true
+                                }
+                            }
+                        }
+                    });
+                    break;
+
+                case 'doughnut':
+                    currentChart = new Chart(ctx, {
+                        type: 'doughnut',
+                        data: tuitionData,
+                        options: {
+                            responsive: true,
+                            plugins: {
+                                legend: {
+                                    position: 'top',
+                                },
+                                title: {
+                                    display: true,
+                                    text: 'Tuition Preference'
+                                }
+                            }
+                        }
+                    });
+                    break;
+
+                default:
+                    console.error('Invalid chart type');
+            }
+        }
+    </script>
+</body>
+</html>

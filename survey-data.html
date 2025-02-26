@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Survey Data</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <!-- Back Button -->
+    <a href="index.html" class="nav-button">Back to Home</a>
+
+    <!-- Survey Data Section -->
+    <section class="content-section survey-data">
+        <h2>Survey Data</h2>
+        <p>Below is the raw data collected from the survey:</p>
+
+        <!-- Filter Options -->
+        <div class="filter-container">
+            <label for="institutionFilter">Filter by Institution:</label>
+            <select id="institutionFilter" onchange="filterTable()">
+                <option value="all">All</option>
+                <option value="school">School</option>
+                <option value="college">College</option>
+            </select>
+
+            <label for="tuitionFilter">Filter by Tuition:</label>
+            <select id="tuitionFilter" onchange="filterTable()">
+                <option value="all">All</option>
+                <option value="yes">Yes</option>
+                <option value="no">No</option>
+            </select>
+        </div>
+
+        <!-- Survey Data Table -->
+        <div class="table-container">
+            <table id="surveyTable">
+                <thead>
+                    <tr>
+                        <th onclick="sortTable(0)">S.NO</th>
+                        <th onclick="sortTable(0)">Name</th>
+                        <th onclick="sortTable(1)">Aadhar Number</th>
+                        <th onclick="sortTable(2)">Mobile Number</th>
+                        <th onclick="sortTable(3)">Institution</th>
+                        <th onclick="sortTable(4)">Tuition Preference</th>
+                        <th onclick="sortTable(5)">Reasons</th>
+                    </tr>
+                </thead>
+                <tbody id="surveyTableBody">
+                    <!-- Rows will be dynamically added here using JavaScript -->
+                </tbody>
+            </table>
+        </div>
+    </section>
+
+    <!-- JavaScript for Dynamic Data, Filtering, Sorting, and Pagination -->
+    <script>
+const students = [
+    { sno: "1", name: "Mohammed Irfan", aadhar: "7854 9632 1458", mobile: "9876543210", institution: "School", tuition: "Yes", reason: "Weak in Mathematics" },
+    { sno: "2", name: "Sai Charan", aadhar: "6523 8941 7452", mobile: "7890123456", institution: "College", tuition: "No", reason: "Prefers self-study" },
+    { sno: "3", name: "Abdul Rahman", aadhar: "N/A", mobile: "6789012345", institution: "School", tuition: "Yes", reason: "Preparing for IIT" },
+    { sno: "4", name: "Srinivas Reddy", aadhar: "8521 4789 6325", mobile: "9087654321", institution: "School", tuition: "No", reason: "Financial constraints" },
+    { sno: "5", name: "Ayesha Shaikh", aadhar: "9632 5874 1236", mobile: "8765432109", institution: "College", tuition: "Yes", reason: "Parental pressure" },
+    { sno: "6", name: "Ramesh Babu", aadhar: "7412 5896 3214", mobile: "7654321098", institution: "School", tuition: "Yes", reason: "Weak in Science" },
+    { sno: "7", name: "Syed Rehman", aadhar: "N/A", mobile: "6987654321", institution: "College", tuition: "No", reason: "Manages time well" },
+    { sno: "8", name: "Harish Kumar", aadhar: "8523 6974 1258", mobile: "8098765432", institution: "School", tuition: "Yes", reason: "Wants extra guidance" },
+    { sno: "9", name: "N. Parveen", aadhar: "9631 4785 2369", mobile: "9678901234", institution: "College", tuition: "No", reason: "No need, self-sufficient" },
+    { sno: "10", name: "Ashfaq Ahmed", aadhar: "7410 8523 6974", mobile: "9765432108", institution: "School", tuition: "Yes", reason: "Poor in English" },
+    { sno: "11", name: "Anil Kumar", aadhar: "8526 9630 7412", mobile: "7980123456", institution: "College", tuition: "Yes", reason: "Competitive exams" },
+    { sno: "12", name: "Sumanth", aadhar: "9635 7410 8523", mobile: "8690123457", institution: "School", tuition: "Yes", reason: "Needs extra help" },
+    { sno: "13", name: "Venkatesh Rao", aadhar: "N/A", mobile: "9098765432", institution: "College", tuition: "No", reason: "Can manage on own" },
+    { sno: "14", name: "K. Sowmya", aadhar: "7418 5203 6974", mobile: "9876098765", institution: "School", tuition: "Yes", reason: "Parental insistence" },
+    { sno: "15", name: "Lakshmi Priya", aadhar: "8529 6301 4785", mobile: "7689012345", institution: "School", tuition: "Yes", reason: "Weak in Physics" },
+    { sno: "16", name: "Abdul Kareem", aadhar: "9637 4102 5896", mobile: "8076543219", institution: "College", tuition: "No", reason: "Strong in subjects" },
+    { sno: "17", name: "Mahesh Goud", aadhar: "N/A", mobile: "9687654321", institution: "School", tuition: "Yes", reason: "Board exam preparation" },
+    { sno: "18", name: "Fatima Sheikh", aadhar: "7415 8520 9631", mobile: "9878901234", institution: "College", tuition: "Yes", reason: "Wants good grades" },
+    { sno: "19", name: "Yusuf Khan", aadhar: "8526 9630 7412", mobile: "7567890123", institution: "School", tuition: "No", reason: "Prefers self-study" },
+    { sno: "20", name: "Rajeshwari Devi", aadhar: "9638 5201 4785", mobile: "9081234567", institution: "School", tuition: "Yes", reason: "Poor in Chemistry" },
+    { sno: "21", name: "Bhanu Prakash", aadhar: "7414 8522 9630", mobile: "8760987654", institution: "College", tuition: "Yes", reason: "Prepares for EAPCET" },
+    { sno: "22", name: "Krishna Kumar", aadhar: "8525 9638 4102", mobile: "6790123458", institution: "School", tuition: "Yes", reason: "Weak in subjects" },
+    { sno: "23", name: "Amina Sultana", aadhar: "9636 5201 4785", mobile: "7896543210", institution: "College", tuition: "No", reason: "No interest in tuition" },
+    { sno: "24", name: "Rafiq Ahmed", aadhar: "N/A", mobile: "9876012345", institution: "School", tuition: "Yes", reason: "Extra support needed" },
+    { sno: "25", name: "Prashanth Kumar", aadhar: "7418 5203 6974", mobile: "8609876543", institution: "College", tuition: "No", reason: "Self-studying well" },
+    { sno: "26", name: "Shaik Shaziya", aadhar: "8529 6301 4785", mobile: "7065432198", institution: "School", tuition: "Yes", reason: "Needs structured learning" },
+    { sno: "27", name: "Satish Reddy", aadhar: "9637 4102 5896", mobile: "9877890123", institution: "College", tuition: "No", reason: "Time constraints" },
+    { sno: "28", name: "J. Vishnu Priya", aadhar: "7416 8521 9630", mobile: "6789098765", institution: "School", tuition: "Yes", reason: "Parent’s decision" },
+    { sno: "29", name: "T. Vanadev", aadhar: "8524 9637 4102", mobile: "8901234567", institution: "College", tuition: "No", reason: "Manages on own" },
+    { sno: "30", name: "Madhavi Latha", aadhar: "9638 5201 4785", mobile: "7987654321", institution: "School", tuition: "Yes", reason: "Difficult syllabus" },
+    { sno: "31", name: "Shakeel Ahmed", aadhar: "N/A", mobile: "8698765432", institution: "College", tuition: "Yes", reason: "Prepares for JEE" },
+    { sno: "32", name: "Vishnu Vardhan", aadhar: "7419 6302 5896", mobile: "7087654321", institution: "School", tuition: "Yes", reason: "Needs extra practice" },
+    { sno: "33", name: "Madhiha Shaik", aadhar: "8527 4103 6974", mobile: "9678901235", institution: "College", tuition: "No", reason: "Prefers online resources" },
+    { sno: "34", name: "Arif Mohammed", aadhar: "9639 5201 4785", mobile: "9987654321", institution: "School", tuition: "Yes", reason: "Difficulties in English" },
+    { sno: "35", name: "Lavanya Devi", aadhar: "7413 8525 9630", mobile: "7098765432", institution: "College", tuition: "Yes", reason: "Entrance exams prep" },
+    { sno: "36", name: "Seetha Lakshmi", aadhar: "8528 9639 4102", mobile: "9789012345", institution: "School", tuition: "No", reason: "Self-paced learning" },
+    { sno: "37", name: "Karthik Reddy", aadhar: "N/A", mobile: "7687654321", institution: "College", tuition: "Yes", reason: "Parental expectations" },
+    { sno: "38", name: "Y. Vineela", aadhar: "9633 5201 4785", mobile: "8965432109", institution: "School", tuition: "Yes", reason: "Additional subject help" },
+    { sno: "39", name: "K. Mahesh", aadhar: "7411 8527 9630", mobile: "9090876543", institution: "College", tuition: "No", reason: "Finds tuition unnecessary" },
+    { sno: "40", name: "Nagendra Babu", aadhar: "8529 9635 4102", mobile: "7987098765", institution: "School", tuition: "Yes", reason: "Struggles with concepts" },
+    { sno: "41", name: "Ruqayya Begum", aadhar: "9635 5201 4785", mobile: "6780987654", institution: "College", tuition: "Yes", reason: "Wants better results" },
+    { sno: "42", name: "Subhan Khan", aadhar: "N/A", mobile: "8078901234", institution: "School", tuition: "Yes", reason: "JEE Mains preparation" },
+    { sno: "43", name: "Sania Parveen", aadhar: "7412 8526 9630", mobile: "9876012398", institution: "College", tuition: "No", reason: "Studies independently" },
+    { sno: "44", name: "Sharif Shaikh", aadhar: "8521 9633 4102", mobile: "7090987654", institution: "School", tuition: "Yes", reason: "Weak analytical skills" },
+    { sno: "45", name: "Priyanka Chowdary", aadhar: "9634 5201 4785", mobile: "9876890123", institution: "College", tuition: "Yes", reason: "Difficult coursework" },
+    { sno: "46", name: "Aziz Ahmed", aadhar: "7417 8524 9630", mobile: "6789876543", institution: "School", tuition: "No", reason: "No need for tuition" },
+    { sno: "47", name: "Ali Basha", aadhar: "8522 9636 4102", mobile: "8907654321", institution: "College", tuition: "Yes", reason: "Extra learning required" },
+    { sno: "48", name: "Swetha Reddy", aadhar: "N/A", mobile: "9098765438", institution: "School", tuition: "Yes", reason: "Needs structured guidance" },
+    { sno: "49", name: "Shaik Sania Banu", aadhar: "9632 5201 4785", mobile: "7689012376", institution: "College", tuition: "Yes", reason: "Needs exam prep" },
+    { sno: "50", name: "Naseema Begum", aadhar: "7419 8525 9630", mobile: "8078901298", institution: "School", tuition: "No", reason: "Manages well" }
+];
+
+        // Populate the table dynamically
+        function populateTable() {
+            const tbody = document.getElementById('surveyTableBody');
+            tbody.innerHTML = ''; // Clear existing rows
+
+            students.forEach(student => {
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                   <td>${student.sno}</td>
+                    <td>${student.name}</td>
+                    <td>${student.aadhar}</td>
+                    <td>${student.mobile}</td>
+                    <td>${student.institution}</td>
+                    <td>${student.tuition}</td>
+                    <td>${student.reason}</td>
+                `;
+                tbody.appendChild(row);
+            });
+
+            // Initialize pagination after populating the table
+            updatePagination();
+        }
+
+        // Call the function to populate the table on page load
+        populateTable();
+
+        // Pagination Variables
+        let currentPage = 1;
+        const rowsPerPage = 10;
+
+        // Function to filter the table based on user selection
+        function filterTable() {
+            const institutionFilter = document.getElementById('institutionFilter').value.toLowerCase();
+            const tuitionFilter = document.getElementById('tuitionFilter').value.toLowerCase();
+            const rows = document.querySelectorAll('#surveyTableBody tr');
+
+            rows.forEach(row => {
+                const institution = row.children[3].textContent.toLowerCase(); // Institution column
+                const tuition = row.children[4].textContent.toLowerCase(); // Tuition Preference column
+
+                const matchesInstitution = institutionFilter === 'all' || institution.includes(institutionFilter);
+                const matchesTuition = tuitionFilter === 'all' || tuition.includes(tuitionFilter);
+
+                if (matchesInstitution && matchesTuition) {
+                    row.style.display = ''; // Show the row
+                } else {
+                    row.style.display = 'none'; // Hide the row
+                }
+            });
+
+            // Reset pagination after filtering
+            currentPage = 1;
+            updatePagination();
+        }
+
+        // Function to sort the table by column
+        function sortTable(columnIndex) {
+            const table = document.getElementById('surveyTable');
+            const rows = Array.from(table.rows).slice(1); // Exclude header row
+
+            const isAscending = table.getAttribute('data-sort-order') === 'asc';
+            const newOrder = isAscending ? 'desc' : 'asc';
+            table.setAttribute('data-sort-order', newOrder);
+
+            rows.sort((rowA, rowB) => {
+                const cellA = rowA.cells[columnIndex].textContent.trim().toLowerCase();
+                const cellB = rowB.cells[columnIndex].textContent.trim().toLowerCase();
+
+                if (cellA < cellB) return isAscending ? -1 : 1;
+                if (cellA > cellB) return isAscending ? 1 : -1;
+                return 0;
+            });
+
+            // Re-append sorted rows to the table
+            const tbody = document.getElementById('surveyTableBody');
+            tbody.innerHTML = '';
+            rows.forEach(row => tbody.appendChild(row));
+
+            // Reset pagination after sorting
+            currentPage = 1;
+            updatePagination();
+        }
+
+        // Pagination Functions
+        function updatePagination() {
+            const rows = document.querySelectorAll('#surveyTableBody tr');
+            const totalPages = Math.ceil(rows.length / rowsPerPage);
+
+            // Show only rows for the current page
+            rows.forEach((row, index) => {
+                row.style.display = (index >= (currentPage - 1) * rowsPerPage && index < currentPage * rowsPerPage) ? '' : 'none';
+            });
+
+            // Update page info
+            document.getElementById('pageInfo').textContent = `Page ${currentPage} of ${totalPages}`;
+        }
+
+        function nextPage() {
+            const rows = document.querySelectorAll('#surveyTableBody tr');
+            const totalPages = Math.ceil(rows.length / rowsPerPage);
+
+            if (currentPage < totalPages) {
+                currentPage++;
+                updatePagination();
+            }
+        }
+
+        function prevPage() {
+            if (currentPage > 1) {
+                currentPage--;
+                updatePagination();
+            }
+        }
+    </script>
+</body>
+</html>

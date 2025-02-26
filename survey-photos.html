@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Survey Photos</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <!-- Back Button -->
+    <a href="index.html" class="nav-button">Back to Home</a>
+
+    <!-- Survey Photos Section -->
+    <section class="content-section survey-photos">
+        <h2>Survey Photos</h2>
+        <p>Here are some moments captured during our survey process:</p>
+        
+        <!-- Photo Grid -->
+        <div class="photo-grid">
+            <div class="photo-item">
+                <img src="csp1.jpg" alt="Survey Photo 1" onclick="openLightbox('csp1.jpg')">
+                <p class="photo-caption">Students filling out survey forms.</p>
+            </div>
+            <div class="photo-item">
+                <img src="csp2.jpg" alt="Survey Photo 2" onclick="openLightbox('csp2.jpg')">
+                <p class="photo-caption">Group discussion during the survey.</p>
+            </div>
+            <div class="photo-item">
+                <img src="csp3.jpg" alt="Survey Photo 3" onclick="openLightbox('csp3.jpg')">
+                <p class="photo-caption">Community members sharing their thoughts.</p>
+            </div>
+            <div class="photo-item">
+                <img src="csp4.jpg" alt="Survey Photo 4" onclick="openLightbox('csp4.jpg')">
+                <p class="photo-caption">Team conducting interviews.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Lightbox Modal -->
+    <div id="lightbox" class="lightbox-modal">
+        <span class="close-btn" onclick="closeLightbox()">&times;</span>
+        <img class="lightbox-content" id="lightbox-img">
+    </div>
+
+    <!-- JavaScript for Lightbox -->
+    <script>
+        // Function to open the lightbox
+        function openLightbox(imageSrc) {
+            const lightbox = document.getElementById('lightbox');
+            const lightboxImg = document.getElementById('lightbox-img');
+            lightbox.style.display = 'block';
+            lightboxImg.src = imageSrc;
+        }
+
+        // Function to close the lightbox
+        function closeLightbox() {
+            const lightbox = document.getElementById('lightbox');
+            lightbox.style.display = 'none';
+        }
+    </script>
+</body>
+</html>
